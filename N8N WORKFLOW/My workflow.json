@@ -1,0 +1,497 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2640b984-36eb-412f-b1db-62d38a3b6a03",
+      "name": "Telegram Trigger",
+      "webhookId": "334e26bb-d6dd-41f8-a335-7a3b5e0a1c7e",
+      "credentials": {
+        "telegramApi": {
+          "id": "ClAwoYC5WxM36Gry",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $json.message.text;\n\n// Example input: \"hotels Kochi 10\"\nconst parts = text.split(\" \");\n\nreturn [{\n  niche: parts[0] || \"hotel\",\n  location: parts[1] || \"Kochi\",\n  leads_count: parseInt(parts[2]) || 10,\n  output_path: \"output.csv\"\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3f5b8498-c139-4da9-9296-0afa8b09b3f2",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/scrape",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"niche\": \"{{ $json.niche }}\",\n  \"location\": \"{{ $json.location }}\",\n  \"leads_count\": {{ $json.leads_count }},\n  \"output_path\": \"output.csv\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "2793c3e0-268a-4ddd-b28d-904d2461a0bc",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "071d3bc3-bda5-4d04-98b6-c87a7f1b0f08",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1b9KiQF2_wX0GxMIHASwAUCPBpVZbWG0olUjNACdMF9s",
+          "mode": "list",
+          "cachedResultName": "n8n_sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1b9KiQF2_wX0GxMIHASwAUCPBpVZbWG0olUjNACdMF9s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1b9KiQF2_wX0GxMIHASwAUCPBpVZbWG0olUjNACdMF9s/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json['Business Name'] }}",
+            "rating": "={{ $json['Rating'] }}",
+            "reviews": "={{ $json['Number of Reviews'] }}",
+            "website": "={{ $json['Website Link'] }}",
+            "email": "={{ $json['Email'] }}",
+            "phone": "={{ $json['Contact Number'] }}",
+            "address": "={{ $json['Google Map Location'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "rating",
+              "displayName": "rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reviews",
+              "displayName": "reviews",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "website",
+              "displayName": "website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        0
+      ],
+      "id": "7e800f5f-6ae3-4628-838d-32dccb116e96",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ReP4keQfWjowyNN9",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a lead qualification expert for a web design agency.\n\nAnalyze this business and determine if they need a website or redesign:\n\nBusiness Name: {{ $json['name'] }}\nWebsite: {{ $json['website'] }}\nRating: {{ $json['rating'] }}\nReviews: {{ $json['reviews'] }}\n\nRespond ONLY in this exact JSON format, no extra text, no backticks:\n{\n  \"business_name\": \"...\",\n  \"lead_score\": 8,\n  \"needs_website\": \"Yes / No / Redesign\",\n  \"reason\": \"One sentence why they need a website or redesign\",\n  \"approach_strategy\": \"One sentence on how to approach them\",\n  \"outreach_message\": \"A short 3-4 line personalized cold outreach message\"\n}"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "41d5e8f6-13bc-46a9-b14f-b8870691cf47",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "R1U6XHaSP9EGp1Bw",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const candidates = $json.candidates;\nconst rawText = candidates[0].content.parts[0].text;\n\n// Clean the response\nconst cleaned = rawText.replace(/```json|```/g, '').trim();\n\n// Parse JSON\nconst parsed = JSON.parse(cleaned);\n\nreturn [{ json: parsed }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1392,
+        0
+      ],
+      "id": "0f7d403f-a8f7-4911-9434-116db0929a3e",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "109Bm8xLPAYalIgBlOVqSPBzLTFIKHrbcvfQLECdT_zY",
+          "mode": "list",
+          "cachedResultName": "Lead Analysis Results",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/109Bm8xLPAYalIgBlOVqSPBzLTFIKHrbcvfQLECdT_zY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/109Bm8xLPAYalIgBlOVqSPBzLTFIKHrbcvfQLECdT_zY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "business_name": "={{ $json.business_name }}",
+            "lead_score": "={{ $json.lead_score }}",
+            "needs_website": "={{ $json.needs_website }}",
+            "reason": "={{ $json.reason }}",
+            "approach_strategy": "={{ $json.approach_strategy }}",
+            "outreach_message": "={{ $json.outreach_message }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "business_name",
+              "displayName": "business_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_score",
+              "displayName": "lead_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "needs_website",
+              "displayName": "needs_website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "approach_strategy",
+              "displayName": "approach_strategy",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "outreach_message",
+              "displayName": "outreach_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1600,
+        -112
+      ],
+      "id": "aee5b98b-6700-401e-a5f3-69255f962c44",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ReP4keQfWjowyNN9",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "34b12c52-6943-8043-aec5-c84e3138913b",
+          "mode": "list",
+          "cachedResultName": "34b12c52-6943-8043-aec5-c84e3138913b",
+          "cachedResultUrl": "https://www.notion.so/34b12c5269438043aec5c84e3138913b"
+        },
+        "title": "Lead Analysis Results",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "business_name|title",
+              "title": "={{ $json.business_name }}"
+            },
+            {
+              "key": "lead_score|number",
+              "numberValue": "={{ $json.lead_score }}"
+            },
+            {
+              "key": "needs_website|select",
+              "selectValue": "={{ $json.needs_website }}"
+            },
+            {
+              "key": "reason|rich_text",
+              "textContent": "={{ $json.reason }}"
+            },
+            {
+              "key": "approach_strategy|rich_text",
+              "textContent": "={{ $json.approach_strategy }}"
+            },
+            {
+              "key": "outreach_message|rich_text",
+              "textContent": "={{ $json.outreach_message }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        1600,
+        64
+      ],
+      "id": "6cf1f840-39b0-4dbf-b634-37d49b9063c5",
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "HAtA0lFKvwooMIZ2",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c4173ca0-5f61-441e-9fe8-e41e3d57a286",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "bbf0c656ecd2e6094c75977099af2ac3f4b11938c7b971d3d8f1370ef16196cb"
+  },
+  "id": "xrge1yimJ21RKBte",
+  "tags": []
+}
