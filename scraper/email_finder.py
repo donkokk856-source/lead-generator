@@ -3,7 +3,7 @@ Email Finder Module
 
 Searches websites for email addresses using async HTTP requests.
 
-Copyright (c) 2026 @khil
+
 """
 
 import asyncio
