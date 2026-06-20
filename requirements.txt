@@ -1,0 +1,6 @@
+playwright==1.41.0
+playwright-stealth==1.0.6
+beautifulsoup4==4.12.3
+httpx==0.26.0
+rich==13.7.0
+validators==0.22.0
