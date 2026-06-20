@@ -3,7 +3,7 @@ Business Scraper Module
 
 Extracts detailed information from individual Google Maps business pages.
 
-Copyright (c) 2026 @khil
+
 """
 
 import time
