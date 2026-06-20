@@ -3,7 +3,7 @@ Google Maps Scraper Module
 
 Handles navigation and URL collection from Google Maps search results.
 
-Copyright (c) 2026 @khil
+
 """
 
 import time
