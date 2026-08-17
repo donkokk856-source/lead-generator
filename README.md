@@ -1,8 +1,8 @@
-# 🗺️ Google Maps Lead Generator & AI Analyzer
+#  Google Maps Lead Generator & AI Analyzer
 
 An automated pipeline that scrapes business leads from Google Maps, qualifies them using AI, and routes the results into Google Sheets, Notion, and Telegram — built for outreach by web design / automation agencies.
 
-## 🎯 What it does
+## What it does
 
 1. **Scrapes** businesses from Google Maps by niche + location (e.g. "hotels in Kochi")
 2. **Extracts** name, phone, email, website, rating, reviews, and address
@@ -10,7 +10,7 @@ An automated pipeline that scrapes business leads from Google Maps, qualifies th
 4. **Analyzes** each lead with Google Gemini AI to score how likely they need a new/redesigned website
 5. **Outputs** a qualified lead list — with lead score, reasoning, approach strategy, and a ready-to-send outreach message — into Google Sheets and Notion
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 Telegram Trigger (e.g. "hotels Kochi 10")
@@ -34,7 +34,7 @@ n8n Code Node → parses AI JSON response
         └──► Notion Database (qualified leads)
 ```
 
-## 🧩 Tech Stack
+##  Tech Stack
 
 | Layer | Tool |
 |---|---|
@@ -46,7 +46,7 @@ n8n Code Node → parses AI JSON response
 | Trigger / Notify | Telegram Bot |
 | Tunneling | ngrok |
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 lead-generator/
@@ -63,7 +63,7 @@ lead-generator/
 └── .gitignore
 ```
 
-## ⚙️ Setup
+##  Setup
 
 ### 1. Install dependencies
 ```bash
@@ -93,7 +93,7 @@ ngrok http 5678
 ### 5. Import the workflow
 In n8n: **Workflows → Import from File** → select `n8n-workflows/lead-gen-workflow.json`, then connect your own credentials for Google Sheets, Gemini, Notion, and Telegram.
 
-## 🔑 Required Credentials
+##  Required Credentials
 
 - Google Sheets OAuth (or Service Account)
 - Google Gemini API key — [aistudio.google.com](https://aistudio.google.com)
@@ -102,7 +102,7 @@ In n8n: **Workflows → Import from File** → select `n8n-workflows/lead-gen-wo
 
 > None of these are stored in the workflow JSON — only credential references. You'll need to reconnect each one in your own n8n instance.
 
-## 🚀 Usage
+##  Usage
 
 Send a message to your Telegram bot in the format:
 ```
